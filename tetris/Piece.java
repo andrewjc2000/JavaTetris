@@ -80,37 +80,22 @@ public class Piece {
     }
 
     public Piece dropDown(Color[][] grid) {
-        ArrayList<Integer> bottomIndices = new ArrayList<>(4);
         int maxDrop = Integer.MAX_VALUE;
-        for (int i = 0;i < coords.length; i++) {
+        for (int[] baseCoord: coords) {
             boolean hasCoordBelow = false;
-            for (int j = 0; j < coords.length; j++) {
-                if (i != j && coords[j][0] > coords[i][0]) {
+            for (int[] otherCoord : coords) {
+                if (otherCoord[0] > baseCoord[0] && baseCoord[1] == otherCoord[1]) {
                     hasCoordBelow = true;
                     break;
                 }
             }
             if (!hasCoordBelow) {
-                bottomIndices.add(i);
-                maxDrop = Math.min(maxDrop, grid.length - 1 - coords[i][0]);
-            }
-        }
-
-        for (int x = 0; x < grid[0].length; x++) {
-            for (int row = 0; row < grid.length; row++) {
-                if (grid[row][x] != null) {
-                    if (coordNotInPiece(row, x)) {
-                        int finalX = x;
-                        Optional<Integer> found = bottomIndices.stream().filter(i -> coords[i][1] == finalX).findFirst();
-                        if (found.isPresent()) {
-                            int drop = row - 1 - coords[found.get()][0];
-                            if (drop < maxDrop) {
-                                maxDrop = Math.max(drop, 0);
-                            }
-                        }
-                        break;
-                    }
+                int x = baseCoord[1];
+                int drop = 0;
+                for (int row = baseCoord[0] + 1; row < grid.length && grid[row][x] == null; row++) {
+                    drop++;
                 }
+                maxDrop = Math.min(maxDrop, drop);
             }
         }
         if (maxDrop == 0) {
