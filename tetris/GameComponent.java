@@ -16,12 +16,25 @@ public class GameComponent extends JComponent implements KeyListener {
     private int UPDATE_EVERY = 50;
     private static final double SPEEDUP_FACTOR = 0.95;
 
-    private static final int[][][] PIECE_COORD_DATA = {{{0, 5}, {1, 5}, {2, 5}, {3, 5}}, {{0, 4}, {0, 5}, {0, 6}, {1, 5}}};
+    private static final int[][][] PIECE_COORD_DATA = {
+        {{0, 5}, {1, 5}, {2, 5}, {3, 5}},
+        {{0, 4}, {0, 5}, {0, 6}, {1, 5}},
+        {{0, 5}, {0, 4}, {1, 5}, {1, 4}},
+        {{0, 4}, {0, 5}, {1, 5}, {2, 5}},
+        {{0, 5}, {0, 4}, {1, 4}, {2, 4}},
+        {{0, 5}, {1, 5}, {1, 4}, {2, 4}},
+        {{0, 4}, {1, 4}, {1, 5}, {2, 5}}
+    };
     private static final Piece[] PIECE_DATA;
     static {
-        PIECE_DATA = new Piece[2];
+        PIECE_DATA = new Piece[7];
         PIECE_DATA[0] = new Piece(PIECE_COORD_DATA[0], Color.CYAN, 1);
         PIECE_DATA[1] = new Piece(PIECE_COORD_DATA[1], Color.MAGENTA, 1);
+        PIECE_DATA[2] = new Piece(PIECE_COORD_DATA[2], Color.YELLOW, -1);
+        PIECE_DATA[3] = new Piece(PIECE_COORD_DATA[3], Color.ORANGE, 2);
+        PIECE_DATA[4] = new Piece(PIECE_COORD_DATA[4], Color.BLUE, 2);
+        PIECE_DATA[5] = new Piece(PIECE_COORD_DATA[5], Color.RED, 1);
+        PIECE_DATA[6] = new Piece(PIECE_COORD_DATA[6], Color.GREEN, 1);
     }
 
 

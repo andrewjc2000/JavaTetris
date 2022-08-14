@@ -15,8 +15,8 @@ public class Piece {
         this.coords = coords;
         this.color = color;
         this.rotateIndex = rotateIndex;
-        this.baseX = coords[rotateIndex][1];
-        this.baseY = coords[rotateIndex][0];
+        this.baseX = rotateIndex == -1 ? -1 : coords[rotateIndex][1];
+        this.baseY = rotateIndex == -1 ? -1 : coords[rotateIndex][0];
     }
 
     public int[][] getCoords() {
@@ -41,6 +41,9 @@ public class Piece {
     }
 
     public Piece rotateLeft() {
+        if (rotateIndex == -1) {
+            return this;
+        }
         int[][] newCoords = new int[coords.length][coords.length == 0 ? 0 : coords[0].length];
         for (int i = 0; i < coords.length; i++) {
             newCoords[i] = Arrays.copyOf(coords[i], coords[i].length);
