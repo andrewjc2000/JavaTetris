@@ -14,7 +14,12 @@ public class GameComponent extends JComponent implements KeyListener {
     private static final int CLEAR_TICKS = 50;
 
     private int UPDATE_EVERY = 50;
-    private static final double SPEEDUP_FACTOR = 0.95;
+
+    private int level, score;
+
+    private int getPointsForNextLevel() {
+        return (level + 1) * 4000;
+    }
 
     private static final int[][][] PIECE_COORD_DATA = {
         {{0, 5}, {1, 5}, {2, 5}, {3, 5}},
@@ -37,10 +42,11 @@ public class GameComponent extends JComponent implements KeyListener {
         PIECE_DATA[6] = new Piece(PIECE_COORD_DATA[6], Color.GREEN, 1);
     }
 
-
-
     public void levelUp() {
-        UPDATE_EVERY = (int) (UPDATE_EVERY * SPEEDUP_FACTOR);
+        if (UPDATE_EVERY > 0) {
+            UPDATE_EVERY--;
+        }
+        level++;
     }
 
     private Color[][] grid;
@@ -57,6 +63,8 @@ public class GameComponent extends JComponent implements KeyListener {
         gameOver = false;
         clearingRows = new HashSet<>(4);
         clearProgress = 0;
+        level = 1;
+        score = 0;
     }
 
     private void initGrid() {
@@ -168,6 +176,14 @@ public class GameComponent extends JComponent implements KeyListener {
                     if (onAnotherPieceOrAtBottom()) {
                         piece = null;
                         checkRows();
+                        if (!clearingRows.isEmpty()) {
+                            score += (int) Math.pow(150 * clearingRows.size(), 1.1);
+                        } else {
+                            score += 10;
+                        }
+                        if (score >= getPointsForNextLevel()) {
+                            levelUp();
+                        }
                         counter = UPDATE_EVERY - 1;
                     } else {
                         updatePiece(piece.downOne());
@@ -205,6 +221,9 @@ public class GameComponent extends JComponent implements KeyListener {
                 drawCell(g, (startingX + x) * CELL_LENGTH, 5 + y * CELL_LENGTH, grid[y][x], clearingRows.contains(y));
             }
         }
+        g.setColor(Color.WHITE);
+        g.drawString("Score: " + score, 100, 100);
+        g.drawString("Level: " + level, 100, 150);
     }
 
     @Override
